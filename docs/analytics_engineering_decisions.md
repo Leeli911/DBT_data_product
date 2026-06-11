@@ -23,6 +23,10 @@ The current mart grains are:
 - `fact_orders`: one row per order.
 - `fact_sessions`: one row per recomputed user session.
 
+The current attribution bridge grain is:
+
+- `int_order_session_attribution`: one row per order.
+
 The current aggregate grain is:
 
 - `agg_daily_ecommerce_metrics`: one row per `metric_date` and `traffic_source`.
@@ -44,6 +48,7 @@ The resulting `fact_sessions` model includes:
 - Cancelled orders are excluded from `gmv_amount` in `fact_orders`.
 - Returned orders are retained and separately flagged through `is_returned_order` and `returned_amount`.
 - Session conversion is based on whether a recomputed session contains a purchase event.
+- Revenue by channel uses `attributed_traffic_source`, which links orders to recomputed sessions where possible and falls back to the original order-level source when no reliable session match exists.
 
 ## Why Ratio Metrics Are Not Stored Directly
 

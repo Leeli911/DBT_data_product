@@ -30,6 +30,52 @@ models:
         tests:
           - not_null
 
+  - name: int_order_session_attribution
+    description: Bridge model that assigns each order to a recomputed session where possible, with order-source fallback when no reliable session match exists.
+    columns:
+      - name: order_id
+        description: Order identifier; this bridge keeps exactly one row per order.
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        description: User associated with the order.
+        tests:
+          - not_null
+      - name: converting_session_id
+        description: Recomputed session identifier when the order can be linked to a session.
+      - name: session_start_at
+        description: Start timestamp of the matched recomputed session.
+      - name: session_end_at
+        description: End timestamp of the matched recomputed session.
+      - name: session_traffic_source
+        description: Traffic source from the matched recomputed session.
+      - name: order_traffic_source
+        description: Original order-level traffic source from the order record.
+        tests:
+          - not_null
+      - name: attributed_traffic_source
+        description: Traffic source used for revenue attribution.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['paid_search', 'organic_search', 'social', 'email', 'direct', 'affiliate']
+      - name: attribution_method
+        description: Rule used to assign the attributed traffic source.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['purchase_event_match', 'timestamp_window_match', 'order_source_fallback']
+      - name: attribution_status
+        description: Whether the order was linked to a recomputed session or fell back to order-level source.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['attributed', 'fallback']
+
   - name: int_order_items_enriched
     description: Order-item lines enriched with parent order and product attributes.
     columns:

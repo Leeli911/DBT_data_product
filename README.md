@@ -22,12 +22,14 @@ The implementation is intentionally local-first with DuckDB so the full project 
 - dbt project structure with staging, intermediate, and marts layers.
 - Kimball-style facts and dimensions with explicit grains.
 - 30-minute inactivity-based sessionization.
+- Order-to-session attribution that aligns revenue-by-channel metrics with recomputed sessions where possible.
 - Event deduplication in the staging layer.
 - Metrics layer design for GMV, orders, active users, conversion rate, AOV, repeat purchase rate, new vs returning users, and revenue by channel.
 - Additivity-aware aggregate design that stores numerators and denominators instead of precomputed ratios.
 - Enforced marts-layer dbt contracts with complete column names and data types.
 - Defensive data quality tests and business assertion tests.
 - dbt docs generation and GitHub-renderable lineage evidence.
+- GitHub Actions CI for repeatable dbt seed, run, test, and docs generation.
 
 ## Architecture
 
@@ -43,7 +45,7 @@ flowchart LR
 Implemented assets:
 
 - `stg_events`, `stg_orders`, `stg_order_items`, `stg_products`, `stg_users`
-- `int_user_sessions`, `int_order_items_enriched`
+- `int_user_sessions`, `int_order_items_enriched`, `int_order_session_attribution`
 - `dim_users`, `dim_products`, `fact_orders`, `fact_sessions`
 - `agg_daily_ecommerce_metrics`
 
@@ -87,8 +89,8 @@ Latest validation:
 
 ```text
 dbt seed: PASS=5 WARN=0 ERROR=0
-dbt run:  PASS=12 WARN=0 ERROR=0
-dbt test: PASS=140 WARN=0 ERROR=0
+dbt run:  PASS=13 WARN=0 ERROR=0
+dbt test: PASS=157 WARN=0 ERROR=0
 dbt docs generate: completed successfully
 ```
 
@@ -126,14 +128,7 @@ source .venv/bin/activate
 uv pip install -r requirements.txt
 ```
 
-Copy the example profile:
-
-```bash
-mkdir -p ~/.dbt
-cp profiles.example.yml ~/.dbt/profiles.yml
-```
-
-Build and test the warehouse:
+Build and test the warehouse. The script creates a local ignored `profiles.yml` from `profiles.example.yml` if needed:
 
 ```bash
 ./run_project.sh
@@ -142,8 +137,8 @@ Build and test the warehouse:
 Generate docs:
 
 ```bash
-dbt docs generate
-dbt docs serve --port 8080
+dbt docs generate --profiles-dir .
+dbt docs serve --profiles-dir . --port 8080
 ```
 
 ## BigQuery Migration Path
@@ -151,6 +146,10 @@ dbt docs serve --port 8080
 This project does not claim zero-code migration from DuckDB to BigQuery. The stable parts are the metric definitions, model grains, contracts, tests, and mart interfaces. The expected migration work is concentrated in source and staging models, especially GA4 nested field extraction with `event_params` and `items`.
 
 See [BigQuery Migration Notes](docs/bigquery_migration.md).
+
+## v2 Design Review
+
+The v2 iteration adds an attribution bridge so revenue by channel no longer has to blindly trust order-level source fields when a recomputed converting session is available. See [v2 Design Review](docs/v2_design_review.md).
 
 ## Portfolio Positioning
 

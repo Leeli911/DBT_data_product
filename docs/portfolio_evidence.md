@@ -7,8 +7,8 @@ This document lists the evidence assets that should be captured before publishin
 Generate the docs site locally:
 
 ```bash
-dbt docs generate
-dbt docs serve --port 8080
+dbt docs generate --profiles-dir .
+dbt docs serve --profiles-dir . --port 8080
 ```
 
 The generated site is a local build artifact under `target/` and should not be committed.
@@ -21,8 +21,8 @@ Latest validation:
 
 ```text
 dbt seed: PASS=5 WARN=0 ERROR=0
-dbt run:  PASS=12 WARN=0 ERROR=0
-dbt test: PASS=140 WARN=0 ERROR=0
+dbt run:  PASS=13 WARN=0 ERROR=0
+dbt test: PASS=157 WARN=0 ERROR=0
 dbt docs generate: completed successfully
 ```
 
@@ -31,7 +31,7 @@ dbt docs generate: completed successfully
 Save screenshots under `docs/assets/` with these filenames:
 
 - `dbt-lineage-marts.png`: lineage graph showing raw seeds through staging, intermediate, marts, and aggregate metrics.
-- `dbt-test-results.png`: terminal output or dbt docs evidence showing 140 passing tests.
+- `dbt-test-results.png`: terminal output or dbt docs evidence showing 157 passing tests.
 - `aggregate-query-results.png`: query result showing channel-level GMV, valid orders, conversion rate, and AOV calculated from additive components.
 
 If screenshots are not available yet, use these committed evidence files:
@@ -61,5 +61,6 @@ These assets should support the story that the project is not only a dashboard d
 - explicit model grains
 - enforced marts-layer contracts
 - governed metrics
+- order-to-session attribution for channel revenue consistency
 - additivity-aware aggregate design
 - lineage-ready dbt documentation

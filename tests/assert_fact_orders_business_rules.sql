@@ -22,3 +22,22 @@ where (
     or total_revenue < 0
     or gmv_amount < 0
     or returned_amount < 0
+    or attributed_traffic_source is null
+    or attribution_method not in ('purchase_event_match', 'timestamp_window_match', 'order_source_fallback')
+    or attribution_status not in ('attributed', 'fallback')
+    or (
+        attribution_status = 'attributed'
+        and converting_session_id is null
+    )
+    or (
+        attribution_status = 'fallback'
+        and converting_session_id is not null
+    )
+    or (
+        attribution_method = 'order_source_fallback'
+        and attribution_status != 'fallback'
+    )
+    or (
+        attribution_method != 'order_source_fallback'
+        and attribution_status != 'attributed'
+    )

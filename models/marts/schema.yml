@@ -186,9 +186,36 @@ models:
                 values: ['placed', 'shipped', 'delivered', 'returned', 'cancelled']
       - name: traffic_source
         data_type: varchar
-        description: Order-level attributed traffic source.
+        description: Original order-level traffic source from the order record.
         tests:
           - not_null
+      - name: attributed_traffic_source
+        data_type: varchar
+        description: Traffic source used for revenue attribution after linking orders to recomputed sessions where possible.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['paid_search', 'organic_search', 'social', 'email', 'direct', 'affiliate']
+      - name: converting_session_id
+        data_type: varchar
+        description: Recomputed session ID matched to the order when attribution_status is attributed.
+      - name: attribution_method
+        data_type: varchar
+        description: Rule used to assign the attributed traffic source.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['purchase_event_match', 'timestamp_window_match', 'order_source_fallback']
+      - name: attribution_status
+        data_type: varchar
+        description: Whether the order was linked to a recomputed session or fell back to order-level source.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['attributed', 'fallback']
       - name: order_line_count
         data_type: bigint
         description: Number of order lines attached to the order.

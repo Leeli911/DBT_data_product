@@ -16,15 +16,15 @@ Run:
 
 ```bash
 ./run_project.sh
-dbt docs generate
+dbt docs generate --profiles-dir .
 ```
 
 Expected result:
 
 ```text
 dbt seed: PASS=5 WARN=0 ERROR=0
-dbt run:  PASS=12 WARN=0 ERROR=0
-dbt test: PASS=140 WARN=0 ERROR=0
+dbt run:  PASS=13 WARN=0 ERROR=0
+dbt test: PASS=157 WARN=0 ERROR=0
 dbt docs generate: completed successfully
 ```
 
@@ -33,7 +33,7 @@ dbt docs generate: completed successfully
 Run:
 
 ```bash
-dbt docs serve --port 8080
+dbt docs serve --profiles-dir . --port 8080
 ```
 
 Capture screenshots:

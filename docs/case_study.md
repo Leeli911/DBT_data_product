@@ -26,12 +26,13 @@ Key engineering decisions:
 - Built a three-layer dbt structure: staging, intermediate, and marts.
 - Standardized raw fields and deduplicated events in staging.
 - Recomputed sessions with a 30-minute inactivity boundary instead of blindly trusting source session IDs.
+- Added an order-to-session attribution bridge so revenue by channel can align with recomputed converting sessions when possible.
 - Modeled `dim_users`, `dim_products`, `fact_orders`, and `fact_sessions` with explicit grains.
 - Built `agg_daily_ecommerce_metrics` at `metric_date + traffic_source`.
 - Stored metric components rather than final ratios to preserve additivity.
 - Defined 8 governed e-commerce metrics with business definitions, SQL logic, grain, dimensions, and edge cases.
 - Enforced marts-layer dbt contracts with explicit column names and data types.
-- Added 140 dbt tests, including primary key tests, relationship tests, accepted values, business assertion tests, and reconciliation tests.
+- Added 157 dbt tests, including primary key tests, relationship tests, accepted values, business assertion tests, attribution coverage, and reconciliation tests.
 - Generated dbt docs and a GitHub-renderable lineage graph.
 
 ## Result
@@ -40,8 +41,8 @@ The project now provides a reproducible analytics engineering warehouse prototyp
 
 ```text
 5 seeds
-12 dbt models
-140 passing dbt tests
+13 dbt models
+157 passing dbt tests
 enforced marts-layer contracts
 documented metric definitions
 lineage-ready documentation

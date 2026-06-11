@@ -6,6 +6,7 @@ This document defines the governed e-commerce metrics used by the project. Metri
 
 - `fact_orders`: one row per order.
 - `fact_sessions`: one row per recomputed user session.
+- `int_order_session_attribution`: one row per order, assigning revenue attribution to a recomputed session when possible.
 - `dim_users`: one row per user.
 - `agg_daily_ecommerce_metrics`: one row per `metric_date` and `traffic_source`.
 
@@ -100,6 +101,7 @@ where order_status != 'cancelled'
 ### Repeat Purchase Rate
 
 - Business definition: Share of purchasing users whose current non-cancelled order is at least their second valid order.
+- This is not a cohort retention metric. It measures the share of purchasing users at the reporting grain whose valid order on that date is their second or later valid order.
 - Formula: `repeat_purchasing_users / purchasing_users`.
 - SQL logic:
 
@@ -148,13 +150,13 @@ left join {{ ref('dim_users') }} as dim_users
 
 ### Revenue by Channel
 
-- Business definition: GMV grouped by attributed traffic source.
+- Business definition: GMV grouped by the attributed traffic source assigned by `int_order_session_attribution`.
 - Formula: `sum(gmv_amount) group by traffic_source`.
 - SQL logic:
 
 ```sql
 select
-    traffic_source,
+    attributed_traffic_source,
     sum(gmv_amount) as revenue
 from {{ ref('fact_orders') }}
 where order_status != 'cancelled'
@@ -164,4 +166,4 @@ group by 1
 - Aggregate source: `sum(agg_daily_ecommerce_metrics.gmv_amount) group by traffic_source`.
 - Grain: order-level in `fact_orders`; daily channel-level in `agg_daily_ecommerce_metrics`.
 - Valid dimensions: date and traffic source.
-- Edge cases: This project uses order-level traffic source attribution. A production system may need multi-touch attribution or session-to-order attribution rules.
+- Edge cases: Orders are first attributed through purchase-event session matches, then timestamp-window matches, then order-source fallback. A production system may need late-event handling, last non-direct click, or multi-touch attribution rules.

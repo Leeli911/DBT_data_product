@@ -1,0 +1,30 @@
+name: dbt CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  dbt-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv pip install --system -r requirements.txt
+
+      - name: Run dbt project
+        run: ./run_project.sh
+
+      - name: Generate dbt docs
+        run: dbt docs generate --profiles-dir .

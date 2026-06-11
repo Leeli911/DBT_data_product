@@ -18,10 +18,11 @@ The project focuses on metric trust rather than dashboard decoration. It demonst
 
 - Modeled raw e-commerce events into staging, intermediate, and marts layers.
 - Implemented 30-minute inactivity-based sessionization.
+- Added order-to-session attribution for channel revenue consistency.
 - Built `fact_orders`, `fact_sessions`, `dim_users`, `dim_products`, and `agg_daily_ecommerce_metrics`.
 - Defined 8 core e-commerce metrics with business logic and edge cases.
 - Enforced marts-layer dbt contracts.
-- Added 140 passing dbt tests.
+- Added 157 passing dbt tests.
 - Generated dbt docs and lineage-ready evidence.
 - Designed the local DuckDB implementation with a clear BigQuery/GA4 migration path.
 
@@ -38,7 +39,7 @@ The project focuses on metric trust rather than dashboard decoration. It demonst
 
 **Trusted E-commerce Metrics**
 
-Analytics engineering project using dbt and DuckDB to transform raw e-commerce events into tested marts, governed metrics, and data contracts. Includes 12 dbt models, 140 passing tests, additive metric components, and lineage-ready documentation.
+Analytics engineering project using dbt and DuckDB to transform raw e-commerce events into tested marts, governed metrics, and data contracts. Includes 13 dbt models, 157 passing tests, order-to-session attribution, additive metric components, and lineage-ready documentation.
 
 ## Suggested Project Links
 

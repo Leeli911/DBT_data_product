@@ -6,6 +6,10 @@ order_items as (
     select * from {{ ref('int_order_items_enriched') }}
 ),
 
+order_session_attribution as (
+    select * from {{ ref('int_order_session_attribution') }}
+),
+
 order_item_summary as (
     select
         order_id,
@@ -25,6 +29,10 @@ select
     orders.order_date,
     orders.order_status,
     orders.traffic_source,
+    order_session_attribution.attributed_traffic_source,
+    order_session_attribution.converting_session_id,
+    order_session_attribution.attribution_method,
+    order_session_attribution.attribution_status,
     coalesce(order_item_summary.order_line_count, 0) as order_line_count,
     coalesce(order_item_summary.total_quantity, 0) as total_quantity,
     cast(coalesce(order_item_summary.gross_item_amount, 0) as decimal(18, 2)) as gross_item_amount,
@@ -49,3 +57,5 @@ select
 from orders
 left join order_item_summary
     on orders.order_id = order_item_summary.order_id
+left join order_session_attribution
+    on orders.order_id = order_session_attribution.order_id

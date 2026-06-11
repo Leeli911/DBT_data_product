@@ -6,6 +6,7 @@ dbt_packages/
 
 warehouse/
 profiles.yml
+.user.yml
 
 *.duckdb
 *.duckdb.wal

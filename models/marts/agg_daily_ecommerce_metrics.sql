@@ -61,7 +61,7 @@ orders_with_history as (
 order_metrics as (
     select
         order_date as metric_date,
-        traffic_source,
+        attributed_traffic_source as traffic_source,
         count(*) as valid_order_count,
         count(distinct user_id) as purchasing_users,
         count(distinct case when valid_order_sequence >= 2 then user_id end) as repeat_purchasing_users,
@@ -79,7 +79,7 @@ order_metrics as (
 cancelled_order_metrics as (
     select
         order_date as metric_date,
-        traffic_source,
+        attributed_traffic_source as traffic_source,
         count(*) as cancelled_order_count
     from orders
     where order_status = 'cancelled'

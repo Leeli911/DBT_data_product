@@ -58,10 +58,11 @@ The project enforces:
 Custom tests in `tests/` include:
 
 - `assert_fact_orders_business_rules.sql`: validates cancelled orders, returned orders, GMV, order-line counts, quantities, and non-negative amounts.
+- `assert_order_session_attribution_covers_all_orders.sql`: validates that every staged order has exactly one attribution bridge row.
 - `assert_fact_sessions_business_rules.sql`: validates session time windows, event counts, purchase counts, conversion flags, and first order IDs.
 - `assert_agg_daily_ecommerce_metrics_unique_grain.sql`: enforces the daily channel aggregate grain.
 - `assert_agg_daily_ecommerce_metrics_valid_components.sql`: prevents invalid ratio components such as converted sessions exceeding total sessions.
-- `assert_agg_daily_ecommerce_metrics_reconciles_to_facts.sql`: reconciles aggregate totals back to `fact_orders` and `fact_sessions`.
+- `assert_agg_daily_ecommerce_metrics_reconciles_to_facts.sql`: reconciles aggregate rows back to `fact_orders` and `fact_sessions` at `metric_date + traffic_source`.
 - `assert_dimensions_reconcile_to_facts.sql`: reconciles dimension lifetime summaries back to facts and enriched order items.
 
 ## Current Status
@@ -70,6 +71,6 @@ Data contracts are implemented and passing. Latest validation:
 
 ```text
 dbt seed: PASS=5 WARN=0 ERROR=0
-dbt run:  PASS=12 WARN=0 ERROR=0
-dbt test: PASS=140 WARN=0 ERROR=0
+dbt run:  PASS=13 WARN=0 ERROR=0
+dbt test: PASS=157 WARN=0 ERROR=0
 ```
