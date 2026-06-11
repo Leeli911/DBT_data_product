@@ -1,0 +1,13 @@
+version: 2
+
+seeds:
+  - name: raw_users
+    description: Synthetic user seed data for the local DuckDB portfolio implementation.
+  - name: raw_products
+    description: Synthetic product catalog seed data with category and active status attributes.
+  - name: raw_orders
+    description: Synthetic order seed data with lifecycle statuses, revenue fields, and one intentionally missing revenue value.
+  - name: raw_order_items
+    description: Synthetic order-item seed data at one row per purchased product line.
+  - name: raw_events
+    description: Synthetic GA4-like event seed data with duplicate event IDs for staging-layer deduplication.

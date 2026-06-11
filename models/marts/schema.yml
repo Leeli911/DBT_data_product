@@ -1,0 +1,486 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: User dimension with acquisition attributes, activity dates, and lifetime order/session summaries.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: user_id
+        data_type: varchar
+        description: Primary key for the user dimension.
+        tests:
+          - not_null
+          - unique
+      - name: user_created_at
+        data_type: timestamp
+        description: Timestamp when the user was first created.
+        tests:
+          - not_null
+      - name: country
+        data_type: varchar
+        description: ISO-like country code associated with the user.
+        tests:
+          - not_null
+      - name: acquisition_channel
+        data_type: varchar
+        description: Original acquisition channel for the user.
+        tests:
+          - not_null
+      - name: lifecycle_stage
+        data_type: varchar
+        description: Lightweight lifecycle segment for user analysis.
+        tests:
+          - not_null
+      - name: is_marketing_opted_in
+        data_type: boolean
+        description: Whether the user opted into marketing communication.
+        tests:
+          - not_null
+      - name: first_active_at
+        data_type: timestamp
+        description: First observed session timestamp for the user.
+      - name: last_active_at
+        data_type: timestamp
+        description: Most recent observed session timestamp for the user.
+      - name: lifetime_sessions
+        data_type: bigint
+        description: Count of recomputed sessions associated with the user.
+        tests:
+          - not_null
+      - name: lifetime_converted_sessions
+        data_type: hugeint
+        description: Count of sessions associated with the user that included a purchase.
+        tests:
+          - not_null
+      - name: first_order_at
+        data_type: timestamp
+        description: First order timestamp for the user.
+      - name: last_order_at
+        data_type: timestamp
+        description: Most recent order timestamp for the user.
+      - name: lifetime_orders
+        data_type: bigint
+        description: Count of all orders associated with the user.
+        tests:
+          - not_null
+      - name: lifetime_gmv
+        data_type: decimal(18,2)
+        description: Lifetime GMV from non-cancelled orders.
+        tests:
+          - not_null
+      - name: is_repeat_buyer
+        data_type: boolean
+        description: True when the user has two or more lifetime orders.
+        tests:
+          - not_null
+
+  - name: dim_products
+    description: Product dimension with catalog attributes and lifetime sales summaries.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: product_id
+        data_type: varchar
+        description: Primary key for the product dimension.
+        tests:
+          - not_null
+          - unique
+      - name: product_name
+        data_type: varchar
+        description: Product display name.
+        tests:
+          - not_null
+      - name: product_category
+        data_type: varchar
+        description: Product category.
+        tests:
+          - not_null
+      - name: product_subcategory
+        data_type: varchar
+        description: Product subcategory.
+        tests:
+          - not_null
+      - name: product_brand
+        data_type: varchar
+        description: Product brand.
+        tests:
+          - not_null
+      - name: list_price
+        data_type: decimal(18,2)
+        description: Product list price from the catalog.
+        tests:
+          - not_null
+      - name: is_active
+        data_type: boolean
+        description: Whether the product is active in the catalog.
+        tests:
+          - not_null
+      - name: first_sold_at
+        data_type: timestamp
+        description: First timestamp when this product appeared in a non-cancelled order.
+      - name: last_sold_at
+        data_type: timestamp
+        description: Most recent timestamp when this product appeared in a non-cancelled order.
+      - name: lifetime_order_lines
+        data_type: bigint
+        description: Count of non-cancelled order lines for the product.
+        tests:
+          - not_null
+      - name: lifetime_quantity_sold
+        data_type: hugeint
+        description: Quantity sold across non-cancelled orders.
+        tests:
+          - not_null
+      - name: lifetime_gross_item_amount
+        data_type: decimal(18,2)
+        description: Gross item amount across non-cancelled orders.
+        tests:
+          - not_null
+      - name: lifetime_net_item_amount
+        data_type: decimal(18,2)
+        description: Net item amount across non-cancelled orders.
+        tests:
+          - not_null
+
+  - name: fact_orders
+    description: Order fact table at one row per order.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: order_id
+        data_type: varchar
+        description: Primary key for the order fact.
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        data_type: varchar
+        description: User foreign key.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_users')
+                field: user_id
+      - name: order_timestamp
+        data_type: timestamp
+        description: Timestamp when the order was placed.
+        tests:
+          - not_null
+      - name: order_date
+        data_type: date
+        description: Date when the order was placed.
+        tests:
+          - not_null
+      - name: order_status
+        data_type: varchar
+        description: Order lifecycle status.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['placed', 'shipped', 'delivered', 'returned', 'cancelled']
+      - name: traffic_source
+        data_type: varchar
+        description: Order-level attributed traffic source.
+        tests:
+          - not_null
+      - name: order_line_count
+        data_type: bigint
+        description: Number of order lines attached to the order.
+        tests:
+          - not_null
+      - name: total_quantity
+        data_type: hugeint
+        description: Total item quantity across order lines.
+        tests:
+          - not_null
+      - name: gross_item_amount
+        data_type: decimal(18,2)
+        description: Gross item amount before item-level discounts.
+        tests:
+          - not_null
+      - name: item_discount_amount
+        data_type: decimal(18,2)
+        description: Sum of item-level discounts.
+        tests:
+          - not_null
+      - name: net_item_amount
+        data_type: decimal(18,2)
+        description: Net item amount after item-level discounts.
+        tests:
+          - not_null
+      - name: subtotal_amount
+        data_type: decimal(18,2)
+        description: Order subtotal from the staged order record.
+        tests:
+          - not_null
+      - name: tax_amount
+        data_type: decimal(18,2)
+        description: Order tax amount.
+        tests:
+          - not_null
+      - name: shipping_amount
+        data_type: decimal(18,2)
+        description: Order shipping amount.
+        tests:
+          - not_null
+      - name: discount_amount
+        data_type: decimal(18,2)
+        description: Order total discount amount.
+        tests:
+          - not_null
+      - name: total_revenue
+        data_type: decimal(18,2)
+        description: Defensive total revenue, defaulted to zero when source revenue is missing.
+        tests:
+          - not_null
+      - name: gmv_amount
+        data_type: decimal(18,2)
+        description: GMV contribution for the order, excluding cancelled orders.
+        tests:
+          - not_null
+      - name: returned_amount
+        data_type: decimal(18,2)
+        description: Revenue amount associated with returned orders.
+        tests:
+          - not_null
+      - name: has_missing_revenue
+        data_type: boolean
+        description: True when source revenue was missing before staging defaulted it.
+        tests:
+          - not_null
+      - name: is_cancelled_order
+        data_type: boolean
+        description: True when the order lifecycle status is cancelled.
+        tests:
+          - not_null
+      - name: is_returned_order
+        data_type: boolean
+        description: True when the order lifecycle status is returned.
+        tests:
+          - not_null
+
+  - name: fact_sessions
+    description: Session fact table at one row per recomputed user session.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: session_id
+        data_type: varchar
+        description: Primary key for the session fact.
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        data_type: varchar
+        description: User foreign key.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_users')
+                field: user_id
+      - name: session_start_at
+        data_type: timestamp
+        description: Timestamp when the recomputed session started.
+        tests:
+          - not_null
+      - name: session_date
+        data_type: date
+        description: Date when the recomputed session started.
+        tests:
+          - not_null
+      - name: session_end_at
+        data_type: timestamp
+        description: Timestamp when the recomputed session ended.
+        tests:
+          - not_null
+      - name: session_duration_minutes
+        data_type: integer
+        description: Difference in minutes between session start and session end.
+        tests:
+          - not_null
+      - name: traffic_source
+        data_type: varchar
+        description: Traffic source from the first event in the recomputed session.
+        tests:
+          - not_null
+      - name: device_category
+        data_type: varchar
+        description: Device category from the first event in the recomputed session.
+        tests:
+          - not_null
+      - name: landing_page
+        data_type: varchar
+        description: First page in the session.
+        tests:
+          - not_null
+      - name: exit_page
+        data_type: varchar
+        description: Last page in the session.
+        tests:
+          - not_null
+      - name: event_count
+        data_type: bigint
+        description: Number of events in the session.
+        tests:
+          - not_null
+      - name: page_views_count
+        data_type: hugeint
+        description: Count of page view events in the session.
+        tests:
+          - not_null
+      - name: product_views_count
+        data_type: hugeint
+        description: Count of product view events in the session.
+        tests:
+          - not_null
+      - name: add_to_cart_count
+        data_type: hugeint
+        description: Count of add-to-cart events in the session.
+        tests:
+          - not_null
+      - name: checkout_count
+        data_type: hugeint
+        description: Count of checkout-start events in the session.
+        tests:
+          - not_null
+      - name: purchase_count
+        data_type: hugeint
+        description: Count of purchase events in the session.
+        tests:
+          - not_null
+      - name: is_converted_session
+        data_type: boolean
+        description: True when the session contains a purchase event.
+        tests:
+          - not_null
+      - name: first_order_id
+        data_type: varchar
+        description: First order ID observed in the session, when the session converted.
+
+  - name: agg_daily_ecommerce_metrics
+    description: Daily channel-level aggregate table that preserves additive metric components for semantic-layer calculations.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: metric_date
+        data_type: date
+        description: Reporting date for the aggregate row.
+        tests:
+          - not_null
+      - name: traffic_source
+        data_type: varchar
+        description: Marketing or product channel for the aggregate row.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['paid_search', 'organic_search', 'social', 'email', 'direct', 'affiliate']
+      - name: total_sessions
+        data_type: bigint
+        description: Count of sessions at the aggregate grain; denominator for conversion rate.
+        tests:
+          - not_null
+      - name: converted_sessions
+        data_type: hugeint
+        description: Count of sessions containing at least one purchase; numerator for conversion rate.
+        tests:
+          - not_null
+      - name: active_users
+        data_type: bigint
+        description: Distinct users active at the aggregate grain; not additive across dates or channels.
+        tests:
+          - not_null
+      - name: new_active_users
+        data_type: bigint
+        description: Distinct active users whose first active date equals the metric date.
+        tests:
+          - not_null
+      - name: returning_active_users
+        data_type: bigint
+        description: Distinct active users whose first active date is before the metric date.
+        tests:
+          - not_null
+      - name: page_views
+        data_type: hugeint
+        description: Page view events at the aggregate grain.
+        tests:
+          - not_null
+      - name: product_views
+        data_type: hugeint
+        description: Product view events at the aggregate grain.
+        tests:
+          - not_null
+      - name: add_to_carts
+        data_type: hugeint
+        description: Add-to-cart events at the aggregate grain.
+        tests:
+          - not_null
+      - name: checkouts
+        data_type: hugeint
+        description: Checkout-start events at the aggregate grain.
+        tests:
+          - not_null
+      - name: valid_order_count
+        data_type: bigint
+        description: Count of non-cancelled orders; denominator for average order value.
+        tests:
+          - not_null
+      - name: cancelled_order_count
+        data_type: bigint
+        description: Count of cancelled orders retained for operational monitoring.
+        tests:
+          - not_null
+      - name: purchasing_users
+        data_type: bigint
+        description: Distinct users with at least one non-cancelled order at the aggregate grain.
+        tests:
+          - not_null
+      - name: repeat_purchasing_users
+        data_type: bigint
+        description: Distinct users whose non-cancelled order sequence is at least two at purchase time.
+        tests:
+          - not_null
+      - name: gmv_amount
+        data_type: decimal(18,2)
+        description: GMV amount from non-cancelled orders; numerator for AOV and revenue-by-channel reporting.
+        tests:
+          - not_null
+      - name: returned_amount
+        data_type: decimal(18,2)
+        description: Revenue amount associated with returned orders for separate return analysis.
+        tests:
+          - not_null
+      - name: gross_item_amount
+        data_type: decimal(18,2)
+        description: Gross item amount from non-cancelled orders.
+        tests:
+          - not_null
+      - name: net_item_amount
+        data_type: decimal(18,2)
+        description: Net item amount from non-cancelled orders.
+        tests:
+          - not_null
+      - name: tax_amount
+        data_type: decimal(18,2)
+        description: Tax amount from non-cancelled orders.
+        tests:
+          - not_null
+      - name: shipping_amount
+        data_type: decimal(18,2)
+        description: Shipping amount from non-cancelled orders.
+        tests:
+          - not_null
+      - name: discount_amount
+        data_type: decimal(18,2)
+        description: Discount amount from non-cancelled orders.
+        tests:
+          - not_null

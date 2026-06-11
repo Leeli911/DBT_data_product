@@ -1,0 +1,8 @@
+trusted_ecommerce_metrics:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: warehouse/ecommerce.duckdb
+      schema: main
+      threads: 4

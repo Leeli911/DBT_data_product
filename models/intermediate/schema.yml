@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: int_user_sessions
+    description: Recomputed user sessions using a 30-minute inactivity boundary instead of trusting source session identifiers.
+    columns:
+      - name: session_id
+        description: Recomputed session identifier scoped by user and inactivity gap.
+        tests:
+          - not_null
+          - unique
+      - name: user_id
+        description: User associated with the session.
+        tests:
+          - not_null
+      - name: session_start_at
+        description: Timestamp of the first event in the recomputed session.
+        tests:
+          - not_null
+      - name: session_end_at
+        description: Timestamp of the last event in the recomputed session.
+        tests:
+          - not_null
+      - name: landing_page
+        description: First page location observed in the session.
+      - name: exit_page
+        description: Last page location observed in the session.
+      - name: is_converted_session
+        description: True when the session contains at least one purchase event.
+        tests:
+          - not_null
+
+  - name: int_order_items_enriched
+    description: Order-item lines enriched with parent order and product attributes.
+    columns:
+      - name: order_item_id
+        description: Stable order-item identifier.
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        description: Parent order identifier.
+        tests:
+          - not_null
+      - name: product_id
+        description: Purchased product identifier.
+        tests:
+          - not_null
+      - name: gross_item_amount
+        description: Quantity multiplied by unit price before line-level discount.
+        tests:
+          - not_null
+      - name: net_item_amount
+        description: Item gross amount less line-level discount, floored at zero.
+        tests:
+          - not_null

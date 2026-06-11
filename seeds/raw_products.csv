@@ -1,0 +1,25 @@
+product_id,product_name,category,subcategory,brand,list_price,is_active
+p001,Everyday Tote,Accessories,Bags,Northstar,42.00,true
+p002,Canvas Backpack,Accessories,Bags,Northstar,68.00,true
+p003,Wireless Desk Lamp,Home,Lighting,Lumio,89.00,true
+p004,Ceramic Mug Set,Home,Kitchen,Hearth,32.00,true
+p005,Linen Sheet Set,Home,Bedding,Hearth,128.00,true
+p006,Minimal Wallet,Accessories,Wallets,Northstar,35.00,true
+p007,Running Socks 3-Pack,Apparel,Socks,Stride,18.00,true
+p008,Training Hoodie,Apparel,Outerwear,Stride,74.00,true
+p009,Studio Joggers,Apparel,Bottoms,Stride,64.00,true
+p010,Insulated Bottle,Outdoor,Drinkware,TrailCo,38.00,true
+p011,Travel Organizer,Travel,Packing,Nomad,29.00,true
+p012,Carry-on Packing Cubes,Travel,Packing,Nomad,46.00,true
+p013,Noise Canceling Earbuds,Electronics,Audio,Sonic,119.00,true
+p014,Bluetooth Speaker Mini,Electronics,Audio,Sonic,79.00,true
+p015,USB-C Charging Hub,Electronics,Accessories,Volt,54.00,true
+p016,Desk Cable Kit,Electronics,Accessories,Volt,24.00,true
+p017,Yoga Mat,Fitness,Training,Balance,58.00,true
+p018,Resistance Band Set,Fitness,Training,Balance,27.00,true
+p019,Pour-over Coffee Kit,Home,Kitchen,Hearth,72.00,true
+p020,Trail Daypack,Outdoor,Bags,TrailCo,96.00,true
+p021,Rain Shell,Outdoor,Outerwear,TrailCo,142.00,true
+p022,Merino Tee,Apparel,Tops,Stride,48.00,true
+p023,Archived Phone Stand,Electronics,Accessories,Volt,19.00,false
+p024,Gift Card,Gift Cards,Digital,Trusted Shop,50.00,true
