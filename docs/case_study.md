@@ -4,6 +4,8 @@
 
 E-commerce teams often define revenue, conversion, active users, and repeat purchase behavior differently across marketing, product, and finance dashboards. When analysts query raw events directly, metric logic becomes duplicated, hard to audit, and vulnerable to upstream tracking issues.
 
+The classic anti-pattern is definition sprawl: marketing may reason from channel clicks, product may reason from sessions, and finance may reason from orders. This project shows how a version-controlled dbt workflow can reduce that friction before data reaches a dashboard.
+
 ## Task
 
 Build a small but complete analytics engineering project that converts raw e-commerce events and transactions into trusted marts, governed metric definitions, and a self-service-ready reporting foundation.
@@ -32,7 +34,7 @@ Key engineering decisions:
 - Stored metric components rather than final ratios to preserve additivity.
 - Defined 8 governed e-commerce metrics with business definitions, SQL logic, grain, dimensions, and edge cases.
 - Enforced marts-layer dbt contracts with explicit column names and data types.
-- Added 158 dbt tests, including primary key tests, relationship tests, accepted values, business assertion tests, attribution coverage, attribution status consistency, and reconciliation tests.
+- Added 150+ dbt tests, including primary key tests, relationship tests, accepted values, business assertion tests, attribution coverage, attribution status consistency, and reconciliation tests.
 - Generated dbt docs and a GitHub-renderable lineage graph.
 
 ## Result
@@ -42,11 +44,13 @@ The project now provides a reproducible analytics engineering warehouse prototyp
 ```text
 5 seeds
 13 dbt models
-158 passing dbt tests
+150+ passing dbt tests
 enforced marts-layer contracts
 documented metric definitions
 lineage-ready documentation
 ```
+
+Latest local v2 validation reports `158` passing dbt tests. Public resume and portfolio copy should use the exact `158` count only after the v2 branch is merged to `main` and GitHub Actions confirms the same result.
 
 The final marts and metric components can support self-service analytics without requiring every dashboard to reimplement deduplication, sessionization, revenue handling, or ratio logic.
 
@@ -61,6 +65,8 @@ This project is not only a dashboard demo. It shows the practical analytics engi
 - ratio metrics are computed from valid numerator and denominator components
 - aggregate models reconcile back to facts
 
-## Future Production Extension
+## What I Learned and What I Would Improve
 
-In a production BigQuery/GA4 environment, the main migration work would be in source and staging models, especially nested `event_params` and `items` extraction. The marts, metric definitions, contracts, and business tests are designed to remain as stable as possible.
+This project is intentionally portfolio-scale. The next production step would be to handle late-arriving events, larger event volumes, last non-direct touch, multi-touch attribution, incremental models, and BigQuery/GA4 nested `event_params` and `items` extraction.
+
+The marts, metric definitions, contracts, and business tests are designed to remain as stable as possible while source and staging logic changes for a cloud warehouse.

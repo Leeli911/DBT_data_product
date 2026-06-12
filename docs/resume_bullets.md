@@ -2,29 +2,53 @@
 
 ## English Version
 
-**Analytics Engineering Portfolio: Trusted E-commerce Metrics with dbt and DuckDB**
+**Trusted E-commerce Metrics with dbt | Analytics Engineering Portfolio Project**
 
-- Built a reproducible dbt analytics engineering project that transforms synthetic GA4-like e-commerce events into tested staging, intermediate, and marts layers using DuckDB.
-- Modeled Kimball-style marts including `dim_users`, `dim_products`, `fact_orders`, and `fact_sessions`, with explicit grains and a 30-minute inactivity-based sessionization workflow.
-- Built an order-to-session attribution bridge to align revenue-by-channel metrics with recomputed converting sessions while preserving the original order-level source for auditability.
-- Defined a governed metrics layer for 8 core e-commerce metrics, including GMV, orders, active users, conversion rate, AOV, repeat purchase rate, new vs returning users, and revenue by channel.
-- Designed an additivity-safe aggregate table that stores numerator and denominator components instead of precomputed ratios, preventing incorrect BI rollups.
-- Enforced marts-layer dbt data contracts and implemented 158 passing tests covering primary keys, foreign keys, accepted values, attribution coverage, attribution status consistency, business rules, and fact-to-aggregate reconciliation.
-- Documented BigQuery/GA4 migration considerations, dbt lineage, metric definitions, and data contract decisions for portfolio review and interview discussion.
+## Recommended 2-Bullet Version
+
+- Built a local-first dbt + DuckDB project that models raw e-commerce orders and event data into staging, intermediate, fact, dimension, and daily metric models.
+- Implemented 30-minute sessionization, order-to-session attribution, additive metric components, enforced dbt contracts, GitHub Actions CI, and 150+ dbt tests for trusted self-service analytics.
+
+After v2 is merged to `main` and GitHub Actions confirms the current count, the second bullet can become:
+
+- Implemented 30-minute sessionization, order-to-session attribution, additive metric components, enforced dbt contracts, GitHub Actions CI, and 158 passing dbt tests for trusted self-service analytics.
+
+## Recommended 4-Bullet Version
+
+- Modeled raw e-commerce users, products, orders, order items, and events into a layered dbt project with staging, intermediate, and marts models.
+- Built SQL-based 30-minute sessionization and an order-to-session attribution bridge to align channel revenue with recomputed user sessions.
+- Designed additive metric components for GMV, conversion rate, AOV, repeat purchase rate, and revenue by channel to avoid pre-aggregated ratio distortion.
+- Added enforced dbt contracts, reconciliation tests, accepted-value checks, and GitHub Actions CI, reaching 150+ passing dbt tests.
 
 ## Short English Version
 
-- Built a dbt + DuckDB analytics engineering portfolio project transforming raw e-commerce events into contracted facts, dimensions, and governed metric components.
-- Implemented dimensional modeling, sessionization, attribution consistency, data contracts, metric definitions, and 158 passing dbt tests for self-service analytics readiness.
+- Built a dbt + DuckDB analytics engineering portfolio project transforming raw e-commerce orders and event data into contracted facts, dimensions, and governed metric components.
+- Implemented dimensional modeling, sessionization, attribution consistency, data contracts, metric definitions, and 150+ dbt tests for self-service analytics readiness.
 
 ## Chinese Version
 
-**分析工程作品集：基于 dbt + DuckDB 的电商可信指标体系**
+**Trusted E-commerce Metrics with dbt | Analytics Engineering Portfolio Project**
 
-- 使用 dbt 与 DuckDB 构建可复现的分析工程项目，将 GA4-like 电商事件和交易数据建模为 staging、intermediate、marts 三层数仓结构。
-- 基于 Kimball 思路设计 `dim_users`、`dim_products`、`fact_orders`、`fact_sessions`，并实现 30 分钟 inactivity sessionization。
-- 建立 order-to-session attribution bridge，使按渠道收入尽量与转化 session 口径对齐，同时保留原始订单渠道用于审计。
-- 定义 GMV、订单数、活跃用户、转化率、AOV、复购率、新老用户、按渠道收入等 8 个核心电商指标。
-- 设计可加性安全的聚合表，只存储分子和分母组件，避免在 BI 层错误平均转化率、AOV 等 ratio 指标。
-- 为 marts 层落地 dbt data contracts，并实现 158 个通过的 dbt tests，覆盖主键、外键、枚举值、归因覆盖、归因状态一致性、业务规则和事实表对账。
-- 编写 BigQuery/GA4 迁移说明、指标定义、数据契约、lineage 和 case study，用于 GitHub 作品集与面试讲解。
+- 使用 dbt + DuckDB 构建 local-first 分析工程作品集，将原始电商订单和事件数据建模为 staging、intermediate、fact、dimension 和每日指标模型。
+- 实现 30 分钟 sessionization、order-to-session attribution、可加性指标组件、dbt contracts、GitHub Actions CI 和 150+ dbt tests，用于支撑可信自助分析。
+
+## Wording Guardrails
+
+Use:
+
+- portfolio-scale
+- local-first
+- production-aware
+- migration path
+- trusted metrics
+- semantic-layer ready
+- self-service analytics ready
+
+Avoid:
+
+- production data platform
+- enterprise-grade
+- real-time
+- scalable to billions of events
+- full semantic layer
+- full GA4 migration

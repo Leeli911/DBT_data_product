@@ -1,6 +1,10 @@
-# Trusted E-commerce Metrics
+# Trusted E-commerce Metrics with dbt
 
-Analytics Engineering portfolio project that turns raw e-commerce events and transactions into tested dbt marts, governed metrics, and self-service-ready analytical assets.
+![dbt-ci](https://github.com/Leeli911/DBT_data_product/actions/workflows/dbt-ci.yml/badge.svg)
+
+A dbt + DuckDB analytics engineering project that turns raw e-commerce orders and event data into trusted facts, dimensions, and governed metric components.
+
+This project focuses on how trusted business metrics are modeled, tested, and documented before they reach dashboards.
 
 ## Why This Project Exists
 
@@ -96,12 +100,15 @@ dbt docs generate: completed successfully
 
 See [Data Contracts](docs/data_contracts.md).
 
+For public portfolio and resume copy, use `150+ dbt tests` until the v2 branch is merged to `main` and GitHub Actions confirms the exact test count. The latest local v2 validation currently reports `158` passing dbt tests.
+
 ## Evidence
 
 - [dbt Lineage](docs/lineage.md)
 - [Test Results Summary](docs/assets/test_results_summary.md)
 - [Channel Metrics Snapshot](docs/assets/channel_metrics_snapshot.md)
 - [Portfolio Evidence Checklist](docs/portfolio_evidence.md)
+- [Interview Prep Guide](docs/interview_prep.md)
 
 Example metric query:
 
@@ -154,3 +161,15 @@ The v2 iteration adds an attribution bridge so revenue by channel no longer has 
 ## Portfolio Positioning
 
 This is a portfolio-scale analytics engineering project, not a production deployment. It is built to demonstrate how I think about data quality, metric governance, semantic-layer readiness, and trustworthy self-service analytics.
+
+Suggested portfolio card:
+
+```text
+Trusted E-commerce Metrics with dbt
+
+A dbt + DuckDB analytics engineering project that turns raw e-commerce orders and events into trusted facts, dimensions, and metric components.
+
+Built with 30-minute sessionization, order-to-session attribution, dbt contracts, 150+ tests, and GitHub Actions CI.
+
+Tech stack: dbt, DuckDB, SQL, GitHub Actions, Python
+```

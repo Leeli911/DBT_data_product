@@ -25,10 +25,10 @@ The design also separates method from status:
 
 ## Remaining Limitations
 
-This portfolio version uses deterministic seed data and a last-touch style bridge. In production, the next design choices would include:
+This portfolio version uses deterministic seed data and a converting-session attribution bridge. In production, the next design choices would include:
 
 - late-arriving event lookback windows
 - source `ga_session_id` or other first-party session identifiers
-- last non-direct click or multi-touch attribution
+- last non-direct touch, time-decay, position-based, or other multi-touch attribution rules
 - order status event facts for cancellations, returns, and negative revenue adjustments
 - CI/CD gates that run contract and reconciliation tests before production deployment

@@ -9,6 +9,9 @@ Use this checklist before publishing the repository.
 - [ ] Confirm `profiles.example.yml` is safe to publish.
 - [ ] Confirm generated dbt artifacts under `target/` are not committed.
 - [ ] Confirm README links render correctly on GitHub.
+- [ ] Confirm v2 is opened as a PR from `codex/v2-enhancement` to `main`.
+- [ ] Confirm GitHub Actions passes on the PR or on `main` after merge.
+- [ ] Add or verify the README CI badge only after the workflow exists on `main`.
 
 ## Validation
 
@@ -26,6 +29,18 @@ dbt seed: PASS=5 WARN=0 ERROR=0
 dbt run:  PASS=13 WARN=0 ERROR=0
 dbt test: PASS=158 WARN=0 ERROR=0
 dbt docs generate: completed successfully
+```
+
+Public copy rule:
+
+- Before v2 is merged to `main` and GitHub Actions passes, use `150+ dbt tests`.
+- After `main` CI confirms the same result, use `158 passing dbt tests`.
+
+Recommended branch cleanup after merge:
+
+```bash
+git fetch origin
+git checkout -B main origin/main
 ```
 
 ## Optional Screenshot Capture
