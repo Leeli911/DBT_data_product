@@ -22,7 +22,7 @@ Latest validation:
 ```text
 dbt seed: PASS=5 WARN=0 ERROR=0
 dbt run:  PASS=13 WARN=0 ERROR=0
-dbt test: PASS=157 WARN=0 ERROR=0
+dbt test: PASS=158 WARN=0 ERROR=0
 dbt docs generate: completed successfully
 ```
 
@@ -31,7 +31,7 @@ dbt docs generate: completed successfully
 Save screenshots under `docs/assets/` with these filenames:
 
 - `dbt-lineage-marts.png`: lineage graph showing raw seeds through staging, intermediate, marts, and aggregate metrics.
-- `dbt-test-results.png`: terminal output or dbt docs evidence showing 157 passing tests.
+- `dbt-test-results.png`: terminal output or dbt docs evidence showing 158 passing tests.
 - `aggregate-query-results.png`: query result showing channel-level GMV, valid orders, conversion rate, and AOV calculated from additive components.
 
 If screenshots are not available yet, use these committed evidence files:

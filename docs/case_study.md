@@ -32,7 +32,7 @@ Key engineering decisions:
 - Stored metric components rather than final ratios to preserve additivity.
 - Defined 8 governed e-commerce metrics with business definitions, SQL logic, grain, dimensions, and edge cases.
 - Enforced marts-layer dbt contracts with explicit column names and data types.
-- Added 157 dbt tests, including primary key tests, relationship tests, accepted values, business assertion tests, attribution coverage, and reconciliation tests.
+- Added 158 dbt tests, including primary key tests, relationship tests, accepted values, business assertion tests, attribution coverage, attribution status consistency, and reconciliation tests.
 - Generated dbt docs and a GitHub-renderable lineage graph.
 
 ## Result
@@ -42,7 +42,7 @@ The project now provides a reproducible analytics engineering warehouse prototyp
 ```text
 5 seeds
 13 dbt models
-157 passing dbt tests
+158 passing dbt tests
 enforced marts-layer contracts
 documented metric definitions
 lineage-ready documentation

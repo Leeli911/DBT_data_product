@@ -25,6 +25,7 @@ purchase_event_candidates as (
     from orders
     inner join events
         on orders.order_id = events.order_id
+        and orders.user_id = events.user_id
         and events.event_name = 'purchase'
     inner join sessions
         on events.user_id = sessions.user_id

@@ -90,7 +90,7 @@ Latest validation:
 ```text
 dbt seed: PASS=5 WARN=0 ERROR=0
 dbt run:  PASS=13 WARN=0 ERROR=0
-dbt test: PASS=157 WARN=0 ERROR=0
+dbt test: PASS=158 WARN=0 ERROR=0
 dbt docs generate: completed successfully
 ```
 
